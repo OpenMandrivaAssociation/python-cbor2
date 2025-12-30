@@ -5,7 +5,7 @@
 
 Name:		python-cbor2
 Version:	5.6.5
-Release:	2
+Release:	3
 Source0:	https://files.pythonhosted.org/packages/source/c/%{module}/%{module}-%{version}.tar.gz
 Summary:	CBOR (de)serializer with extensive tag support
 URL:		https://pypi.org/project/cbor2/
