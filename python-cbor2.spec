@@ -1,12 +1,12 @@
 %define debug_package %{nil}
 %define module cbor2
-# tests disabled for abf
-%bcond_with test
+
+%bcond test 1
 
 Name:		python-cbor2
-Version:	5.6.5
-Release:	3
-Source0:	https://files.pythonhosted.org/packages/source/c/%{module}/%{module}-%{version}.tar.gz
+Version:	5.8.0
+Release:	1
+Source0:	https://files.pythonhosted.org/packages/source/c/%{module}/%{module}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Summary:	CBOR (de)serializer with extensive tag support
 URL:		https://pypi.org/project/cbor2/
 License:	MIT
@@ -14,7 +14,7 @@ Group:		Development/Python
 BuildSystem:	python
 
 BuildRequires:	pkgconfig(pybind11)
-BuildRequires:	pkgconfig(python-%{pyver})
+BuildRequires:	pkgconfig(python3)
 BuildRequires:	python%{pyver}dist(pip)
 BuildRequires:	python%{pyver}dist(setuptools)
 BuildRequires:	python%{pyver}dist(setuptools-scm)
@@ -48,8 +48,8 @@ It is implemented in pure python with an optional C backend.
 
 %prep
 %autosetup -p1 -n %{module}-%{version}
-# remove git badge URLs from README.rst
-sed -i '1,13d' README.rst
+# Remove bundled egg-info
+rm -rf %{module}.egg-info
 
 %build
 export CFLAGS="%{optflags}"
@@ -59,17 +59,19 @@ export CBOR2_BUILD_C_EXTENSION=0
 %py_build
 
 %install
-%py3_install
+%py_install
 
 %if %{with test}
 %check
+export CI=true
+export PYTHONPATH="%{buildroot}%{python_sitelib}:${PWD}"
 pip install -e .[test]
-%{__python} -m pytest -v tests/
+pytest -v tests/
 %endif
 
 %files
 %{_bindir}/%{module}
-%{python3_sitelib}/%{module}/
-%{python3_sitelib}/%{module}*.*-info/
+%{python_sitelib}/%{module}/
+%{python_sitelib}/%{module}*.*-info/
 %doc README.rst
 %license LICENSE.txt
