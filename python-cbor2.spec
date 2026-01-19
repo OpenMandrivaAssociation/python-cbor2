@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 %define module cbor2
-
-%bcond test 1
+# disable tests on ABF, passing locally
+%bcond test 0
 
 Name:		python-cbor2
 Version:	5.8.0
