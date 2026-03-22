@@ -1,18 +1,19 @@
-%define debug_package %{nil}
+%define _debugsource_template %{nil}
 %define module cbor2
 # disable tests on ABF, passing locally
 %bcond test 0
 
 Name:		python-cbor2
-Version:	5.8.0
+Version:	5.9.0
 Release:	1
-Source0:	https://files.pythonhosted.org/packages/source/c/%{module}/%{module}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Summary:	CBOR (de)serializer with extensive tag support
-URL:		https://pypi.org/project/cbor2/
 License:	MIT
 Group:		Development/Python
-BuildSystem:	python
+URL:		https://pypi.org/project/cbor2/
+Source0:	https://files.pythonhosted.org/packages/source/c/%{module}/%{module}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
+BuildSystem:	python
+BuildRequires:	fdupes
 BuildRequires:	pkgconfig(pybind11)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	python%{pyver}dist(pip)
@@ -24,14 +25,9 @@ BuildRequires:	pkgconfig(libcbor)
 BuildRequires:	pkgconfig(libcjson)
 # for tests
 %if %{with test}
-BuildRequires:	python%{pyver}dist(attrs)
 BuildRequires:	python%{pyver}dist(pytest)
 BuildRequires:	python%{pyver}dist(coverage)
 BuildRequires:	python%{pyver}dist(hypothesis)
-BuildRequires:	python%{pyver}dist(iniconfig)
-BuildRequires:	python%{pyver}dist(packaging)
-BuildRequires:	python%{pyver}dist(pluggy)
-BuildRequires:	python%{pyver}dist(sortedcontainers)
 %endif
 
 %description
@@ -44,34 +40,26 @@ Read the docs to learn more.
 
 It is implemented in pure python with an optional C backend.
 
-##################################
-
-%prep
-%autosetup -p1 -n %{module}-%{version}
+%prep -a
 # Remove bundled egg-info
 rm -rf %{module}.egg-info
 
-%build
+%build -p
 export CFLAGS="%{optflags}"
-export LDFLAGS="%{ldflags} -v"
+export LDFLAGS="%{ldflags} -lpython%{pyver}"
 # dont build cbor2 extension, use system library package libcbor
 export CBOR2_BUILD_C_EXTENSION=0
-%py_build
-
-%install
-%py_install
 
 %if %{with test}
 %check
 export CI=true
 export PYTHONPATH="%{buildroot}%{python_sitelib}:${PWD}"
-pip install -e .[test]
-pytest -v tests/
+pytest tests/
 %endif
 
 %files
 %{_bindir}/%{module}
-%{python_sitelib}/%{module}/
-%{python_sitelib}/%{module}*.*-info/
+%{python_sitelib}/%{module}
+%{python_sitelib}/%{module}-%{version}.dist-info
 %doc README.rst
 %license LICENSE.txt
