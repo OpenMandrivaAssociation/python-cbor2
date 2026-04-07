@@ -5,7 +5,7 @@
 
 Name:		python-cbor2
 Version:	5.9.0
-Release:	1
+Release:	2
 Summary:	CBOR (de)serializer with extensive tag support
 License:	MIT
 Group:		Development/Python
