@@ -58,7 +58,7 @@ popd
 %if %{with test}
 %check
 export CI=true
-export PYTHONPATH="%{buildroot}%{python_sitelib}:${PWD}"
+export PYTHONPATH="%{buildroot}%{python_sitearch}:${PWD}"
 pytest tests/
 %endif
 
