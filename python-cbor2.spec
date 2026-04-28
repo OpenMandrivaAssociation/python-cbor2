@@ -28,6 +28,7 @@ BuildRequires:	python%{pyver}dist(wheel)
 BuildRequires:	python%{pyver}dist(pytest)
 BuildRequires:	python%{pyver}dist(coverage)
 BuildRequires:	python%{pyver}dist(hypothesis)
+BuildRequires:	python%{pyver}dist(tzdata)
 %endif
 
 %description
