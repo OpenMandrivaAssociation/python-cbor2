@@ -4,7 +4,7 @@
 %bcond test 1
 
 Name:		python-cbor2
-Version:	6.0.1
+Version:	6.1.0
 Release:	1
 Summary:	Python CBOR (de)serializer with extensive tag support
 License:	MIT
