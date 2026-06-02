@@ -1,10 +1,9 @@
 %define _debugsource_template %{nil}
 %define module cbor2
-
 %bcond test 1
 
 Name:		python-cbor2
-Version:	6.1.1
+Version:	6.1.2
 Release:	1
 Summary:	Python CBOR (de)serializer with extensive tag support
 License:	MIT
